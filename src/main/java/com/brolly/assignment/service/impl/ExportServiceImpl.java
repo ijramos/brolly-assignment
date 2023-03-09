@@ -44,6 +44,7 @@ public class ExportServiceImpl implements ExportService {
         );
 
         // TODO: Implement File Generation
+        // Update status of export to Processing
         LOG.info("-------------------------------------------");
         LOG.info("order_id, customer_name, product_name, order_date");
         for(ProductOrder order : productOrders) {
@@ -56,7 +57,7 @@ public class ExportServiceImpl implements ExportService {
         }
         LOG.info("-------------------------------------------");
 
-        updateStatus(exportEvent.getId(), "completed");
+        updateStatus(exportEvent.getTransactionId(), "Completed"); // Only update status to Completed once File Generation is done and file is ready
     }
 
     public ProductOrder mapProductOrderFromEvent(ExportEvent exportEvent) {
@@ -68,19 +69,19 @@ public class ExportServiceImpl implements ExportService {
     }
 
     @Override
-    public Export findById(Long id) {
+    public Export findById(String id) {
         Optional<Export> export = exportRepository.findById(id);
         return export.orElse(null);
     }
 
     @Override
-    public Long save(Export export) {
-        return exportRepository.save(export).getId();
+    public String save(Export export) {
+        return exportRepository.save(export).getTransactionId();
     }
 
     @Override
-    public void updateStatus(Long id, String status) {
-        Optional<Export> optional = exportRepository.findById(id);
+    public void updateStatus(String transactionId, String status) {
+        Optional<Export> optional = exportRepository.findById(transactionId);
         if(optional.isPresent()) {
             Export export = optional.get();
             export.setStatus(status);

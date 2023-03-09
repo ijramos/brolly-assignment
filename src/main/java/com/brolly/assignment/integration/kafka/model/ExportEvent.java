@@ -2,20 +2,20 @@ package com.brolly.assignment.integration.kafka.model;
 
 public class ExportEvent {
 
-    private Long id;
+    private String transactionId;
     private String format;
     private ExportFilter filter;
 
-    public Long getId() {
-        return id;
+    public String getTransactionId() {
+        return transactionId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setTransactionId(String transactionId) {
+        this.transactionId = transactionId;
     }
 
-    public ExportEvent id(Long id) {
-        this.id = id;
+    public ExportEvent transactionId(String transactionId) {
+        this.transactionId = transactionId;
         return this;
     }
 

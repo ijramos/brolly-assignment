@@ -5,6 +5,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ExportRepository extends CrudRepository<Export, Long> {
+public interface ExportRepository extends CrudRepository<Export, String> {
 
 }

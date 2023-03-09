@@ -36,11 +36,11 @@ public class ExportController {
 
     @PostMapping
     public ResponseEntity<EntityModel<ExportResponse>> export(@RequestBody ExportRequest exportRequest) {
-        Long transactionId = exportEventProducer.send(modelMapper.mapExportRequestToEventModel(exportRequest));
+        String transactionId = exportEventProducer.send(modelMapper.mapExportRequestToEventModel(exportRequest));
 
         ExportResponse response = new ExportResponse();
-        response.setStatus("submitted");
-        response.setTransactionId(String.valueOf(transactionId));
+        response.setStatus("Submitted");
+        response.setTransactionId(transactionId);
 
         EntityModel<ExportResponse> entityModel = EntityModel.of(response,
                 linkTo(methodOn(ExportController.class).status(response.getTransactionId())).withSelfRel());
@@ -50,7 +50,7 @@ public class ExportController {
 
     @GetMapping(value = "/{transactionId}")
     public ResponseEntity<EntityModel<ExportResponse>> status(@PathVariable String transactionId) {
-        Export export = exportService.findById(Long.valueOf(transactionId));
+        Export export = exportService.findById(transactionId);
 
         if(export == null) {
             return ResponseEntity.notFound().build();
@@ -63,7 +63,7 @@ public class ExportController {
         EntityModel<ExportResponse> entityModel = EntityModel.of(response,
                 linkTo(methodOn(ExportController.class).status(transactionId)).withSelfRel());
 
-        if("completed".equals(export.getStatus())) {
+        if("Completed".equals(export.getStatus())) {
             entityModel.add(linkTo(methodOn(ExportController.class).download(transactionId)).withRel("download"));
         }
 

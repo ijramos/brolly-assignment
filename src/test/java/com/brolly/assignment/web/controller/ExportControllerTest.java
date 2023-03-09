@@ -43,18 +43,32 @@ class ExportControllerTest {
 
     @Test
     void givenValidTransactionId_whenGetStatus_thenReturnExportResponse() throws Exception {
-        Long transactionId = 1L;
+        String transactionId = "test-id";
         Export export = new Export();
         export.setStatus("submitted");
-        export.setId(transactionId);
+        export.setTransactionId(transactionId);
 
         given(exportService.findById(transactionId)).willReturn(export);
 
-        mockMvc.perform(get("/export/1")
+        mockMvc.perform(get("/export/test-id")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value("submitted"))
-                .andExpect(jsonPath("$.transactionId").value("1"));
+                .andExpect(jsonPath("$.transactionId").value("test-id"));
+    }
+
+    @Test
+    void givenValidTransactionId_whenGetStatus_thenReturn404() throws Exception {
+        String transactionId = "test-id";
+        Export export = new Export();
+        export.setStatus("submitted");
+        export.setTransactionId(transactionId);
+
+        given(exportService.findById(transactionId)).willReturn(export);
+
+        mockMvc.perform(get("/export/test-id1")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 
     @Test

@@ -4,7 +4,6 @@ import com.brolly.assignment.integration.kafka.model.ExportEvent;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.annotation.DirtiesContext;
@@ -22,7 +21,9 @@ class ExportEventProducerTest {
     @Test
     void send() {
         ExportEvent event = new ExportEvent();
-        event.setId(1L);
+        event.setTransactionId("test-id");
         eventProducer.send(event);
+
+        // TODO: Assert if event was successfully sent
     }
 }
